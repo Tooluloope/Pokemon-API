@@ -1,4 +1,4 @@
-import { processChain } from "./index";
+import { processChain } from "./getEvolutionChain";
 
 describe("processChain", () => {
 	test("should correctly process a simple chain", () => {

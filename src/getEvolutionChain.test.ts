@@ -1,7 +1,7 @@
 import axios from "axios";
 import { expect, jest, test } from "@jest/globals";
 
-import { getEvolutionChain } from "./index";
+import { getEvolutionChain } from "./getEvolutionChain";
 // Mock axios.get
 jest.mock("axios");
 
