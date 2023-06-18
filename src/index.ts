@@ -1,36 +1,11 @@
-import axios from "axios";
-import { Chain } from "./types";
+import { getEvolutionChain } from "./getEvolutionChain";
 
-export async function getEvolutionChain(pokemonName: string) {
-	pokemonName = pokemonName.toLowerCase();
-	try {
-		// get pokemon species information
-		const speciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${pokemonName}/`;
-		const speciesResponse = await axios.get(speciesUrl);
-		const evolutionChainUrl = speciesResponse.data.evolution_chain.url;
+const pokemonName = process.argv[2];
 
-		// get evolution chain data
-		const evolutionResponse = await axios.get(evolutionChainUrl);
-		const chain = evolutionResponse.data.chain as Chain;
-
-		// process the chain to match the desired format
-		let processedChain = processChain(chain);
-
-		// convert the result to a JSON string and return
-		return JSON.stringify(processedChain);
-	} catch (error) {
-		console.error(`An error occurred: ${error}`);
-	}
+if (pokemonName) {
+	getEvolutionChain(pokemonName)
+		.then(chain => console.log(chain))
+		.catch(error => console.error(`An error occurred: ${error}`));
+} else {
+	console.log("Please provide a pokemon name as a command-line argument.");
 }
-
-export function processChain(chain: Chain) {
-	let result = {
-		name: chain.species.name,
-		variations: chain.evolves_to.map(evolution => processChain(evolution)),
-	};
-	return result;
-}
-
-getEvolutionChain("caterpie")
-	.then(chain => console.log(chain))
-	.catch(error => console.error(error));
